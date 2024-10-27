@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface BoykotRepo {
 
-    suspend fun getBoycotAndUygunProducts(status:String):Flow<Resource<List<Products>>>
     suspend fun getCategory():Flow<Resource<List<Category>>>
     suspend fun getCategoryFilterProductPage(id:String):Flow<Resource<List<Products>>>
     suspend fun getNewsBoykot():Flow<Resource<List<News>>>

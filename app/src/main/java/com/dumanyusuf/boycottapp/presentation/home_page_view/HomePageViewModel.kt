@@ -4,8 +4,6 @@ import HomeState
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dumanyusuf.boycottapp.domain.model.Products
-import com.dumanyusuf.boycottapp.domain.use_case.get_filter_products_use_case.GetFilterProductsUseCase
 import com.dumanyusuf.boycottapp.domain.use_case.get_products_in_category_use_case.GetProductsInCategoryUseCase
 import com.dumanyusuf.boycottapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,73 +15,55 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
-    private val getFilterProductsUseCase: GetFilterProductsUseCase,
     private val getProductsInCategoryUseCase: GetProductsInCategoryUseCase
-):ViewModel() {
+) : ViewModel() {
+
+    private val _state = MutableStateFlow<HomeState>(HomeState())
+    val state: StateFlow<HomeState> = _state
 
 
-     private val _state= MutableStateFlow<HomeState>(HomeState())
-     val state:StateFlow<HomeState> = _state
 
-      var allProducts: List<Products> = emptyList()
-
-    fun loadAllINProducts(){
+     fun loadAllINProducts() {
+         Log.e("veriler yuklendi1","veriler yuklendi1")
         viewModelScope.launch {
-             _state.value=HomeState(isLoading = true)
-             getProductsInCategoryUseCase.getProductInCategory().collect{resultProducts->
-                 when(resultProducts){
-                     is Resource.Success->{
-                         allProducts = resultProducts.data ?: emptyList()
-                         _state.value=HomeState(productList = resultProducts.data?: emptyList())
-                         Log.e("success products in category","success get products:${resultProducts.data}")
-                     }
-                     is Resource.Error->{
-                         _state.value=HomeState(isError = "errror")
-                         Log.e("erorr products in category","error get products:${resultProducts.message}")
-                     }
-                     is Resource.Loading->{
-                         _state.value=HomeState(isLoading = true)
-                         Log.e("loading products in category","loading get products")
-                     }
-                 }
-             }
-         }
-     }
+            _state.value = HomeState(isLoading = true)
+            Log.e("veriler yuklendi2","veriler yuklendi2")
+            // Ürünler yüklenmişse `ProductRepository`'den al
+            if (ProductSingleton.getAllProducts().isNotEmpty()) {
+                _state.value = HomeState(productList = ProductSingleton.getAllProducts())
+                Log.e("veriler yuklendi3","veriler yuklendi3")
+                return@launch
+            }
 
-    fun loadFilterProducts(status:String){
-        viewModelScope.launch {
-            _state.value=HomeState(isLoading = true)
-            getFilterProductsUseCase.getFilterProductsUseCase(status).collect{resultProducts->
-                when(resultProducts){
-                    is Resource.Success->{
-                        _state.value=HomeState(productList = resultProducts.data?: emptyList())
-                        Log.e("success products","success get products:${resultProducts.data}")
+            // Yüklenmemişse veritabanından yükleyip `ProductRepository`'e kaydet
+            getProductsInCategoryUseCase.getProductInCategory().collect { resultProducts ->
+                Log.e("veriler yuklendi4","veriler yuklendi4")
+                when (resultProducts) {
+                    is Resource.Success -> {
+                        ProductSingleton.loadAllProducts { resultProducts.data ?: emptyList() }
+                        _state.value = HomeState(productList = ProductSingleton.getAllProducts())
+                        Log.e("veriler yuklendi5","veriler yuklendi5")
                     }
-                    is Resource.Error->{
-                        _state.value=HomeState(isError = "errror")
-                        Log.e("erorr products","error get products:${resultProducts.message}")
+                    is Resource.Error -> {
+                        _state.value = HomeState(isError = "error")
                     }
-                    is Resource.Loading->{
-                        _state.value=HomeState(isLoading = true)
-                        Log.e("loading products","loading get products")
+                    is Resource.Loading -> {
+                        _state.value = HomeState(isLoading = true)
                     }
                 }
             }
         }
     }
 
-
-    fun searchProducts(query: String) {
-        if (query.isEmpty()) {
-            _state.value = HomeState(productList = allProducts) // Boşsa tüm ürünleri göster
-            return
-        }
-
-        val filteredProducts = allProducts.filter { product ->
-            product.productName.contains(query, ignoreCase = true) // Ürün adını kontrol et
-        }
-
+    // Filtreleme işlemi
+    fun loadFilterProducts(status: String) {
+        val filteredProducts = ProductSingleton.getFilteredProducts(status)
         _state.value = HomeState(productList = filteredProducts)
     }
 
+    // Arama işlemi
+    fun searchProducts(query: String) {
+        val filteredProducts = ProductSingleton.searchProducts(query)
+        _state.value = HomeState(productList = filteredProducts)
+    }
 }

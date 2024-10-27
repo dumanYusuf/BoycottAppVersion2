@@ -16,32 +16,6 @@ import javax.inject.Inject
 
 class BoykotRepoImpl @Inject constructor(private val firestore: FirebaseFirestore):BoykotRepo {
 
-
-    override suspend fun getBoycotAndUygunProducts(status: String): Flow<Resource<List<Products>>> = flow {
-        try {
-            val categories = firestore.collection("Category").get().await()
-
-            val allProducts = mutableListOf<Products>()
-
-            for (category in categories.documents) {
-                val productDocs = category.reference.collection("Products").get().await()
-
-                val productsInCategory = productDocs.documents.mapNotNull {
-                    it.toObject(Products::class.java)
-                }
-
-                allProducts.addAll(productsInCategory)
-            }
-
-            val filteredProducts = allProducts.filter { it.productStatus == status }
-
-            emit(Resource.Success(filteredProducts))
-        } catch (e: Exception) {
-            emit(Resource.Error("Error: ${e.message}"))
-        }
-    }
-
-
     override suspend fun getCategory(): Flow<Resource<List<Category>>> = flow{
         try {
             val categoryDocRef=firestore.collection("Category").get().await()

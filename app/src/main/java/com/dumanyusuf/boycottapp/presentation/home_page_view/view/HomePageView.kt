@@ -27,6 +27,8 @@ import com.dumanyusuf.boycottapp.R
 import com.dumanyusuf.boycottapp.Screan
 import com.dumanyusuf.boycottapp.presentation.component.CustomTextField
 import com.dumanyusuf.boycottapp.presentation.home_page_view.HomePageViewModel
+import com.dumanyusuf.boycottapp.ui.theme.AcikMavi
+import com.dumanyusuf.boycottapp.ui.theme.AcikMaviGonderr
 import com.google.gson.Gson
 import java.net.URLEncoder
 
@@ -36,7 +38,7 @@ fun HomePageView(
     viewModel: HomePageViewModel = hiltViewModel()
 ) {
     LaunchedEffect(key1 = true) {
-            viewModel.loadAllINProducts()
+                viewModel.loadAllINProducts()
     }
 
     val context = LocalContext.current
@@ -77,7 +79,7 @@ fun HomePageView(
                 leadingIcon = R.drawable.searchh,
                 trailingIcon = R.drawable.clear,
                 trailingIconOnClick = {
-                    viewModel.allProducts
+                   // viewModel.allProducts
                 }            )
 
             Spacer(modifier = Modifier.padding(10.dp))
@@ -134,6 +136,7 @@ fun HomePageView(
                             fontSize = 24.sp,
                             text = "Aradığınız sonuç bulunamadı"
                         )
+
                     }
                 } else {
                     LazyVerticalGrid(
@@ -187,7 +190,7 @@ fun HomePageView(
                                         Text(
                                             color = when (productList.productStatus) {
                                                 "Boykot" -> Color.Red
-                                                "Uygun" -> Color.Blue
+                                                "Uygun" -> AcikMaviGonderr
                                                 else -> Color.Black
                                             },
                                             fontSize = 20.sp,

@@ -3,6 +3,8 @@ package com.dumanyusuf.boycottapp.presentation.navigation
 import SplashScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -185,7 +187,7 @@ fun PageController() {
                                 icon = {
                                     when (item) {
                                         "Anasayfa" -> {
-                                            Icon(painter = painterResource(id = R.drawable.home), contentDescription = "")
+                                            Icon(imageVector = Icons.Default.Home, contentDescription = "")
                                         }
                                         "Kategoriler" -> {
                                             Icon(painter = painterResource(id = R.drawable.categoryy), contentDescription = "")

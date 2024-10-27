@@ -47,7 +47,8 @@ fun AboutPageView(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 50.dp)
+            //.padding(horizontal = 16.dp, vertical = 50.dp,)
+            .padding(bottom = 140.dp)
     ) {
         Text(
             text = "Hesabım",
@@ -56,7 +57,7 @@ fun AboutPageView(
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 24.dp)
+                .padding(bottom = 24.dp, top = 50.dp)
         )
 
         // İlk Kart
