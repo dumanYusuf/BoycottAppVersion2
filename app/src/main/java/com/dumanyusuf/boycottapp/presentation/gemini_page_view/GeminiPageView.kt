@@ -57,7 +57,7 @@ fun GeminiPageView(
             Box(modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .imePadding()
+                //.imePadding()
             )
             {
                 MessageList(messageList = state,"user")
@@ -67,8 +67,8 @@ fun GeminiPageView(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .imePadding(),
+                    .padding(16.dp),
+                    //.imePadding(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -78,6 +78,7 @@ fun GeminiPageView(
                     maxLines = 2,
                     modifier = Modifier
                         .weight(1f)
+                        //.imePadding()
                         .padding(bottom = 80.dp),
                     placeholder = { Text("Chate Sor...") }
                 )

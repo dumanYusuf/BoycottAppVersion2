@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class AboutViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
-    private val adUnitId = "ca-app-pub-3940256099942544/1033173712" // Test Interstitial ID
+    private val adUnitId = "ca-app-pub-3993872063354474/1642672232" // Test Interstitial ID
      var interstitialAd: InterstitialAd? = null
 
     fun loadInterstitialAd(context: Context) {

@@ -48,7 +48,7 @@ fun AboutPageView(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             //.padding(horizontal = 16.dp, vertical = 50.dp,)
-            .padding(bottom = 140.dp)
+            .padding(bottom = 160.dp)
     ) {
         Text(
             text = "Hesabım",
